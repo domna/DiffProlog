@@ -68,10 +68,6 @@ simp(pow(_,c(0)),c(1)) :- !.		% _^0 = 1
 simp(pow(pow(X,c(Y)),c(Z)),E) :- number(Y), number(Z), K is Y * Z, simp(pow(X,c(K)),E), !. % x^4^2 = x^8
 simp(pow(c(X),c(Y)),c(E)) :- power(X,Y,E). %number(X), number(Y), E is X^Y, !.	% 4 ^ 2 = 16
 
-% Power Funktion, weil tuProlog 'X is a ^ b' nicht unterstützt
-power(B,P,B) :- number(B), number(P), P =:= 1.
-power(B,P,E) :- number(B), number(P), PN is P - 1, power(B,PN,EN), E is EN*B.
-
 % Natürlicher Logarithmus von e
 simp(ln(c(e)),c(1)) :- !. % ln(e) = 1
 
@@ -87,6 +83,10 @@ simp(quot(c(X),prod(Z,c(X))),E) :- simplify(quot(c(1),Z),E), !.		% rev "
 
 simp(X,E) :- X =.. [F,A1,A2], simp(A1,E1), simp(A2,E2), E =.. [F,E1,E2], !. % Spalte Terme auf die keine eigene Vereinfachung besitzen (Um die Unterterme zu vereinfachen)
 simp(X,X) :- !. % catchall
+
+% Power Funktion, weil tuProlog 'X is a ^ b' nicht unterstützt
+power(B,P,B) :- number(B), number(P), P =:= 1.
+power(B,P,E) :- number(B), number(P), PN is P - 1, power(B,PN,EN), E is EN*B.
 
 % Term aufspalten zum Vereinfachen
 simplify(v(X),v(X)) :- !.
